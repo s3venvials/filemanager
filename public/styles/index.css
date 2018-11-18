@@ -1,0 +1,41 @@
+
+  .btn-trashcan {
+    border: none;
+    cursor: pointer;
+    background: transparent;
+  }
+  
+  .table {
+    border-radius: 6px;
+    box-shadow: 8px 8px 5px #999;
+  }
+  
+  .table-div {
+    margin: 3em auto;
+  }
+  
+  .table thead th {
+      vertical-align: bottom;
+      border: 1px solid #ddd;
+  }
+  
+  .table-shadow {
+    box-shadow: 8px 8px 5px #999;
+    border-collapse: separate;
+  }
+  
+  .column-head-applist {
+    background: #dae0e5;
+    color: #111;
+  }
+
+  
+  tr:nth-child(even) {
+    background: #EEE;
+  }
+  tr:nth-child(odd) {
+    background: #FFF;
+  }
+  
+
+  

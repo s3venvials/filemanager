@@ -1,0 +1,17 @@
+<% if(error && error.length > 0){ %>
+    <div class="alert alert-danger" role="alert">
+        <small><i class="fas fa-exclamation-triangle"></i> <%= error %></small>
+    </div>
+<% } %>
+
+<% if(success && success.length > 0){ %>
+    <div class="alert alert-success" role="alert">
+        <small><i class="fas fa-check"></i> <%= success %></small>
+    </div>
+<% } %>
+
+<% if(info && info.length > 0){ %>
+    <div class="alert alert-info" role="alert">
+        <small><i class="fas fa-info-circle"></i> <%= info %></small>
+    </div>
+<% } %>
