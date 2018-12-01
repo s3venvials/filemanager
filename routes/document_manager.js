@@ -3,34 +3,80 @@ let fs = require('fs');
 let path = require('path');
 let router = express.Router();
 let pathToDocs = path.join(__dirname, '../');
-let multer  = require('multer')
+let multer  = require('multer');
+let mongoose = require("mongoose");
+let gridFsStorage = require("multer-gridfs-storage");
+let gridStream = require("gridfs-stream");
+let keys = require("../config/keys");
+
+let gfs;
+let conn = mongoose.createConnection(keys.mongo.dbURI, { useNewUrlParser: true })
+
 //==============
 //Modules
 //==============
-// let getTime  = require("../modules/getDateTime").curTime;
-// let getDate  = require("../modules/getDateTime").curDate;
+let getTime  = require("../modules/curr_date").curTime;
+let getDate  = require("../modules/curr_date").curDate;
 // let getError = require("../modules/exception_viewer").newError;
 
 router.get("/api", (req, res) => {
-    fs.readdir(`${pathToDocs}/public/files/`, (err, files) => {
-        res.send(JSON.stringify(files))
+    gfs.files.find().toArray((err, files) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.send({ files: files });
+        }
     });
 });
 
 router.get("/", (req, res) => {
-    res.render("index");
+    gfs.files.find().toArray((err, files) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.render("index", { files: files });
+        }
+    });
 });
 
 router.get("/upload", (req ,res) => {
     res.render("upload");
 });
 
-const storage = multer.diskStorage({
-    destination: 'public/files',
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
+conn.once('open', (req, res) => {
+    gfs = gridStream(conn.db, mongoose.mongo);
+    gfs.collection('uploads');
+});
+
+const storage = new gridFsStorage({
+    url: keys.mongo.dbURI,
+    file: ( req, file) => {
+        return new Promise((resolve, reject) => {
+            const fileName = file.originalname + path.extname(file.originalname);
+            const fileInfo = {
+                filename: fileName,
+                bucketname: 'uploads'
+            };
+            resolve(fileInfo);
+        });
     }
 });
+
+const upload = multer({
+    storage: storage
+    // fileFilter: function (req, file, cb) {
+    //     checkFileType(file, cb);
+    // }
+}).single('file');
+//User .array for uploading multiple files.
+
+// USE FOR LOCAL STORAGE
+// const storage = multer.diskStorage({
+//     destination: 'public/files',
+//     filename: function(req, file, cb) {
+//         cb(null, file.originalname);
+//     }
+// });
 
 async function checkFileType(file, cb) {
     // Allowed file ext
@@ -65,17 +111,10 @@ function checkExistingFile() {
     });
 }
 
-const upload = multer({
-    storage: storage,
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).single('file');
-//User .array for uploading multiple files.
-
 router.post("/", (req, res) => {
     upload(req, res, (err) => {
         if(err){
+            console.log(err);
             req.flash('error', 'Error uploading your file. Invalid or duplicate file type was detected.');
             res.redirect('back');
         } else {

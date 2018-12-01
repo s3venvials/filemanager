@@ -3,7 +3,14 @@ let app = express();
 let flash = require("connect-flash");
 let session = require("express-session");
 let bodyParser = require("body-parser");
+let methodOverride = require("method-override");
 let filesRoute = require("./routes/document_manager");
+let mongoose = require("mongoose");
+let keys = require("./config/keys");
+
+mongoose.connect(keys.mongo.dbURI, { useNewUrlParser: true }, () => {
+    console.log("Connected to MongoDB.")
+});
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -18,6 +25,7 @@ app.use((session)({
     saveUninitialized: false
 }));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 // Express message Middleware
 app.use((req, res, next) => {
