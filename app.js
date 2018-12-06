@@ -5,6 +5,7 @@ let session = require("express-session");
 let bodyParser = require("body-parser");
 let methodOverride = require("method-override");
 let filesRoute = require("./routes/document_manager");
+let userRoute = require("./routes/user");
 let mongoose = require("mongoose");
 let keys = require("./config/keys");
 
@@ -35,7 +36,8 @@ app.use((req, res, next) => {
     res.locals.warning = req.flash("warning");
     next();
 });
-app.use("/", filesRoute);
+app.use("/filemanager", filesRoute);
+app.use("/", userRoute);
 
 
 //===============

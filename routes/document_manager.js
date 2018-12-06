@@ -7,7 +7,6 @@ const gridStream = require("gridfs-stream");
 const keys = require("../config/keys");
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const crypto = require("crypto");
 router.use(bodyParser.json());
 router.use(methodOverride('_method'));
 //==============
@@ -61,7 +60,7 @@ router.get("/upload", (req ,res) => {
     res.render("upload");
 });
 
-router.post("/", (req, res) => {
+router.post("/upload", (req, res) => {
     upload(req, res, (err) => {
         if(err){
             console.log(err);
@@ -79,11 +78,11 @@ router.get('/files/:filename', (req, res) => {
       // Check if file
       if (!file || file.length === 0) {
         return res.status(404).json({
-          err: 'No file exists'
+          err: 'File contains no information to display.'
         });
       }
-      // File exists
-      return res.json(file);
+        const readstream = gfs.createReadStream(file.filename);
+        readstream.pipe(res);
     });
   });
 
@@ -94,7 +93,7 @@ router.delete('/files/:id', (req, res) => {
         return res.status(404).json({ err: err });
       }
       req.flash('success', filename + " was successfully deleted.");
-      res.redirect('/');
+      res.redirect('/filemanager');
     });
   });
 
