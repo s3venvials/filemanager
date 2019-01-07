@@ -93,7 +93,7 @@ router.delete('/files/:id', (req, res) => {
         return res.status(404).json({ err: err });
       }
       req.flash('success', filename + " was successfully deleted.");
-      res.redirect('/filemanager');
+      res.redirect('/');
     });
   });
 

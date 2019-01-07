@@ -36,15 +36,15 @@ app.use((req, res, next) => {
     res.locals.warning = req.flash("warning");
     next();
 });
-app.use("/filemanager", filesRoute);
-app.use("/", userRoute);
+app.use("/", filesRoute);
+app.use("/user", userRoute);
 
 
 //===============
 // Network
 //===============
 let hostname = '0.0.0.0',
-port = 5000;
+port = 2000;
 
 app.listen(port, hostname, () => {
 console.log(`Server running at http://${hostname}/${port}`);

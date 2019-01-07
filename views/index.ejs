@@ -6,16 +6,16 @@
         <% if(files.length === 0) { %>
             <h4><i class="fas fa-file"></i> File View</h4>
         <hr />
-            <h6>There are no public files to be displayed. <a href="/filemanager/upload">Upload a file.</a></h6>
+            <h6>There are no public files to be displayed. <a href="/upload">Upload a file.</a></h6>
             <!-- <h6>Looking for a private file storage solution? <a href="/">Create an account.</a></h6> -->
 
         <% } else { %>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="/filemanager">File Manager</a>
+                <a class="nav-link active" href="/">File Manager</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/filemanager/upload">File Upload</a>
+                <a class="nav-link" href="/upload">File Upload</a>
             </li>
         </ul>
         <br />
@@ -24,7 +24,7 @@
             <h4><i class="fas fa-file"></i> File View</h4>
         </div>
         <div class="col-md-6">
-            <a href="/filemanager/api" class="btn btn-primary btn-sm float-right" title="Application Program Interface"><i class="fas fa-code"></i> API</a>
+            <a href="/api" class="btn btn-primary btn-sm float-right" title="Application Program Interface"><i class="fas fa-code"></i> API</a>
         </div>
     </div>
     <table class="table" id="myTable">
@@ -40,11 +40,11 @@
         <tbody>
             <% files.forEach(function(file) { %>
             <tr>
-                <td><a href="filemanager/files/<%= file.filename %>"><%= file.filename %></a></td>
+                <td><a href="/files/<%= file.filename %>"><%= file.filename %></a></td>
                 <td><%= file.length %></td>
                 <td><%= file.uploadDate %></td>
                 <td>
-                    <form method="POST" action="/filemanager/files/<%= file._id %>?_method=DELETE">
+                    <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
                         <input type='hidden' name="filename" value="<%= file.filename %>" />
                         <button class="btn btn-danger" style="background: 0 0; border: none; padding: 0;" id="delBtn"><i  style="color: red;" class="fas fa-minus-square"></i></button>
                     </form>
@@ -55,7 +55,7 @@
     </table>
     <% } %>
     <small>Powered By: Server- Node.js, Framework- Express, Template Engine- EJS, Database- MongoDB</small><br />
-    <small>Github Repository: <a href="https://github.com/s3venvials/filemanager" target="_blank">Document Manager</a></small>
+    <small>Github Repository: <a href="https:/github.com/s3venvials/" target="_blank">Document Manager</a></small>
 </div>
 
 <% include ./partials/footer %>
